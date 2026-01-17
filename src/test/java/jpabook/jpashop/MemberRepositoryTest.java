@@ -1,17 +1,17 @@
 package jpabook.jpashop;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+//import org.junit.Test;
+import org.junit.jupiter.api.Test;  // 스프링부터 3.x 이상
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.Assert.*;
 
-@RunWith(SpringRunner.class)
+//@RunWith(SpringRunner.class)  -- 스프링부트 3.x 부터는 JUnit5사용
 @SpringBootTest
 public class MemberRepositoryTest {
 
