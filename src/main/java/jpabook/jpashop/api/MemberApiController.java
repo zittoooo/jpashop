@@ -2,19 +2,53 @@ package jpabook.jpashop.api;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
+import jpabook.jpashop.domain.Address;
 import jpabook.jpashop.domain.Member;
 import jpabook.jpashop.service.MemberService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 public class MemberApiController {
 
     private final MemberService memberService;
+
+
+    @GetMapping("/api/v1/members")
+    public List<Member> getMembers() {
+        return memberService.findMembers();
+    }
+
+    @GetMapping("/api/v2/members")
+    public Result memberV2() {
+        List<Member> findMembers = memberService.findMembers();
+        List<MemberDto> collect = findMembers.stream()
+                .map(m -> new MemberDto(m.getName(), m.getAddress()))
+                .collect(Collectors.toList());
+
+        return new Result(collect.size(), collect);
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class Result<T> {
+        private int count;
+        private T data;
+    }
+
+    @Data
+    @AllArgsConstructor
+    static class MemberDto {
+        private String name;
+        private Address address;
+    }
+
 
     @PostMapping("/api/v1/members")  // 단점: 엔티티 외부 노출
     public CreateMemberResponse saveMemberV1(@RequestBody @Valid Member member) {
